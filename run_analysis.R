@@ -28,8 +28,8 @@ required.packages <- c("downloader", "data.table", "dplyr")
 data.directory <- "data"
 zip.filename <- paste(data.directory, "dataset.zip", sep="/")
 data.set.url <- "https://d396qusza40orc.cloudfront.net/getdata/projectfiles/UCI HAR Dataset.zip"
-data.set.output.1.filename = paste(data.directory, "tidy_merged_data_set.csv", sep="/")
-data.set.output.2.filename = paste(data.directory, "tidy_mean_data_set.csv", sep="/")
+data.set.output.1.filename = paste(data.directory, "tidy_merged_data_set.txt", sep="/")
+data.set.output.2.filename = paste(data.directory, "tidy_mean_data_set.txt", sep="/")
 
 features.filename <- paste(data.directory, "UCI HAR Dataset", "features.txt", sep="/")
 activities.filename <- paste(data.directory, "UCI HAR Dataset", "activity_labels.txt", sep="/")
