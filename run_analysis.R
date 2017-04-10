@@ -353,8 +353,8 @@ run_analysis <- function () {
 
   # write output
   print("...... Start of writing output files ...")
-  write.csv(final.1.df, file=data.set.output.1.filename, row.names=F)
-  write.csv(final.2.df, file=data.set.output.2.filename, row.names=F)
+  write.table(final.1.df, file=data.set.output.1.filename, row.names=F)
+  write.table(final.2.df, file=data.set.output.2.filename, row.names=F)
   print("...... End of writing output files.")
   
   print("... End of analysis.")
