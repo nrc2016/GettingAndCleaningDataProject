@@ -1,3 +1,29 @@
+##############################################################################
+#
+# Filename: run_analysis.R
+#
+# This file defines the functions required to download, merge, tidy, and write
+# data sets for the UCI HAR Data Set. This file was written for the Getting
+# and Cleaning Data course.
+#
+# Functions:
+# - check_required_package_installed
+# - check_required_packages_installed
+# - download_data_set
+# - unzip_data_set
+# - load_and_filter_features
+# - load_activities
+# - join_and_filter_data_sets
+# - calculate_means_activities_subjects
+# - run_analysis
+#
+# Date: April 9, 2017
+#
+#
+# Thank you for your time.
+#
+##############################################################################
+
 required.packages <- c("downloader", "data.table", "dplyr")
 data.directory <- "data"
 zip.filename <- paste(data.directory, "dataset.zip", sep="/")
@@ -20,6 +46,22 @@ train.subject.filename <- paste(data.directory, "UCI HAR Dataset", "train", "sub
 test.subject.filename <- paste(data.directory, "UCI HAR Dataset", "test", "subject_test.txt", sep="/")
 data.set.subject.filenames <- c(train.subject.filename, test.subject.filename)
 
+##############################################################################
+#
+# Function: check_required_package_installed
+#
+# This function checks if the required package is installed and if not attempts
+# to download and install it.
+#
+# Args:
+# - package,name
+#
+# Returns:
+# - TRUE if the package can be installed and loaded
+# - FALSE if the package can not be loaded
+#
+##############################################################################
+
 check_required_package_installed <- function (package.name) {
   if(!require(package.name, character.only = T)) {
     install.packages(package.name)
@@ -30,6 +72,21 @@ check_required_package_installed <- function (package.name) {
   
   return(TRUE)
 }
+
+##############################################################################
+#
+# Function: check_required_packages_installed
+#
+# This function checks if all required packages can be loaded.
+#
+# Args:
+# - list of required packages
+#
+# Returns:
+# - TRUE: if all packages can be loaded
+# - Error Message: if one or more packages cannot be loaded.
+#
+##############################################################################
 
 check_required_packages_installed <- function (required.packages) {
   print("...... Start of checking required packages ...")
@@ -49,11 +106,44 @@ check_required_packages_installed <- function (required.packages) {
   return(error.string)
 }
 
+##############################################################################
+#
+# Function: download_data_set
+#
+# This function downloads the data set from the internet and saves it locally.
+#
+# Args:
+# - url: URL of the data set zip file
+# - zip.file: zip file name
+#
+# Returns:
+#
+##############################################################################
+
 download_data_set <- function(url, zip.file) {
   print("...... Start of downloading data set ...")
   download(url, zip.file)
   print("...... End of downloading data set.")
 }
+
+##############################################################################
+#
+# Function: unzip_data_set
+#
+# This function tests to see if the zip file has been previously downloaded
+# and downloads it if it does not exist locally. The function unzipps the zip
+# file in the directory specified.
+#
+# Args:
+# - url: URL of the data set zip file
+# - zip.file: zip file name
+# - ext.dir: directory for extracting the zip file
+#
+# Returns:
+# TRUE: if no problems downloading or unzipping the data set.
+# FALSE: if problem downloading or unzipping the data set
+#
+##############################################################################
 
 unzip_data_set <- function (url, zip.file, ext.dir) {
   print("... Start of unzipping data set ...")
@@ -65,7 +155,24 @@ unzip_data_set <- function (url, zip.file, ext.dir) {
   }
   unzip(zip.file, exdir=ext.dir)
   print("... End of unzipping data set.")
+  
+  return(TRUE)
 }
+
+##############################################################################
+#
+# Function: load_and_filter_features
+#
+# This function loads the features files and keeps only the mean and standard
+# deviation measures.
+#
+# Args:
+# - filename: features file name
+#
+# Returns:
+# data frame of selected features
+#
+##############################################################################
 
 load_and_filter_features <- function(filename) {
   print("...... Start of load and filter features ...")
@@ -85,6 +192,20 @@ load_and_filter_features <- function(filename) {
   return(selected.features.df)
 }
 
+##############################################################################
+#
+# Function: load_activities
+#
+# This function loads the activity descriptions.
+#
+# Args:
+# - filename: activity file name
+#
+# Returns:
+# data frame of activity descriptors and ids
+#
+##############################################################################
+
 load_activities <- function(filename) {
   print("...... Start of load activities ...")
   
@@ -94,6 +215,26 @@ load_activities <- function(filename) {
   
   return(activities)
 }
+
+##############################################################################
+#
+# Function: join_and_filter_data_sets
+#
+# This function joins the different data sets including the subject ids and 
+# activity descriptions. Also, the function keeps only the relevant features
+# outlined in the features argument.
+#
+# Args:
+# - data.filenames: list of data set filenames
+# - label.filenames: list of data set label filenames
+# - subject.filenames: list of data set subject filenames
+# - features: list of feature descritors and ids
+# - activities: list of activities and ids
+#
+# Returns:
+# data frame of joined and filtered UCI HAR data
+#
+##############################################################################
 
 join_and_filter_data_sets <- function(data.filenames, 
                                       label.filenames,
@@ -132,6 +273,20 @@ join_and_filter_data_sets <- function(data.filenames,
   return(df.final)
 }
 
+##############################################################################
+#
+# Function: calculate_means_activities_subjects
+#
+# This function calculates the averages for the activities and subjects.
+#
+# Args:
+# - df: tidy data frame of UCI HAR data
+#
+# Returns:
+# tidy data frame of average measurements for activities and subjects
+#
+##############################################################################
+
 calculate_means_activities_subjects <- function (df) {
   print("...... Start of calculate means for activities and subjects ...")
   
@@ -144,6 +299,23 @@ calculate_means_activities_subjects <- function (df) {
   return(result)
 }
 
+##############################################################################
+#
+# Function: run_analysis
+#
+# This function is the mainline for the analyisis of the UCI HAR data. It
+# checks for required packages to be loaded and loads supporting meta-data
+# related to features, activity labels, and test subject ids. The function then
+# merges all the different data sets including subject data and activity labels.
+# Once a tidy data set is generated, another tidy data set is created that
+# calculates the average for activities and subjects. Both tidy data sets are
+# written locally.
+#
+# Args:
+#
+# Returns:
+#
+##############################################################################
 
 run_analysis <- function () {
   print("Start of analysis...")
@@ -188,4 +360,5 @@ run_analysis <- function () {
   print("... End of analysis.")
 }
 
+# run the analysis
 run_analysis()
