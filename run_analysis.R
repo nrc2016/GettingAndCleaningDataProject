@@ -135,7 +135,7 @@ join_and_filter_data_sets <- function(data.filenames,
 calculate_means_activities_subjects <- function (df) {
   print("...... Start of calculate means for activities and subjects ...")
   
-  result <- aggregate(final.1.df[, 2:67], list(final.1.df$label, final.1.df$subjectid), mean)
+  result <- aggregate(df[, 2:67], list(df$label, df$subjectid), mean)
   colnames(result)[1:2] = c("label", "subjectid")
   result <- result[order(c(result$label, result$subjectid)),]
   
