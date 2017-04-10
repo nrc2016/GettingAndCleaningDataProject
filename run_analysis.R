@@ -187,3 +187,5 @@ run_analysis <- function () {
   
   print("... End of analysis.")
 }
+
+run_analysis()
